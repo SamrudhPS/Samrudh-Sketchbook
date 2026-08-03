@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sketchbook of Samrudh P.S</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Caveat:wght@500;700&family=Permanent+Marker&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   THEME — every color is a variable, lerped live as you scroll
+   from sunrise (cream paper) → golden hour → midnight (dark)
+   ============================================================ */
+:root{
+  --paper:#fdf9ee;
+  --card:#fffefa;
+  --ink:#2e2c2a;
+  --ink-soft:#6b6660;
+  --ruled:rgba(61,111,180,.06);
+  --margin:rgba(212,84,60,.25);
+  --shadow:rgba(46,44,42,.22);
+  --blue:#3d6fb4;
+  --red:#d4543c;
+  --yellow:#e9b83c;
+  --green:#5a9a6f;
+  --hand:'Patrick Hand',cursive;
+  --marker:'Permanent Marker',cursive;
+  --scribble:'Caveat',cursive;
+  --mono:'IBM Plex Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  background-image:linear-gradient(var(--ruled) 1px,transparent 1px);
+  background-size:100% 34px;
+  font-family:var(--hand);
+  color:var(--ink);
+  font-size:20px;
+  overflow-x:hidden;
+  transition:background-color .2s linear;
+  cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28"><path d="M3 25 L5 19 L21 3 a2.2 2.2 0 0 1 3.1 0 l0.9 0.9 a2.2 2.2 0 0 1 0 3.1 L9 23 Z" fill="%23e9b83c" stroke="%232e2c2a" stroke-width="1.6"/><path d="M3 25 L5 19 L9 23 Z" fill="%23fdf9ee" stroke="%232e2c2a" stroke-width="1.2"/></svg>') 2 26, auto;
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* red margin line + the pencil progress line that draws over it */
+body::before{
+  content:'';position:fixed;top:0;bottom:0;left:56px;width:2px;
+  background:var(--margin);z-index:0;pointer-events:none;
+}
+#progressLine{
+  position:fixed;top:0;left:55px;width:4px;height:0;
+  background:var(--ink);border-radius:3px;z-index:1;pointer-events:none;
+  opacity:.55;
+}
+@media(max-width:700px){body::before{left:24px}#progressLine{left:23px}}
+
+/* chapter bookmark ribbons */
+#ribbons{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:40;display:flex;flex-direction:column;gap:10px}
+#ribbons a{
+  font-family:var(--scribble);font-size:17px;color:var(--paper);text-decoration:none;
+  padding:6px 12px 6px 16px;border-radius:14px 0 0 14px;transform:translateX(54px);
+  transition:transform .2s;box-shadow:-2px 2px 0 var(--shadow);white-space:nowrap;
+}
+#ribbons a:hover{transform:translateX(4px)}
+#ribbons a span{margin-right:8px}
+@media(max-width:900px){#ribbons{display:none}}
+
+.wrap{max-width:860px;margin:0 auto;padding:0 28px;position:relative;z-index:2}
+
+/* ============ COVER ============ */
+.cover{min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;padding:40px 20px;z-index:2}
+.cover .tape{position:absolute;width:110px;height:30px;background:rgba(233,184,60,.45);transform:rotate(-4deg);top:16vh}
+.cover h1{font-family:var(--marker);font-size:clamp(38px,7.6vw,80px);line-height:1.08;transform:rotate(-2deg);margin-bottom:18px}
+.cover h1 .u{position:relative;white-space:nowrap}
+.cover h1 .u::after{content:'';position:absolute;left:-4px;right:-4px;bottom:6px;height:16px;background:rgba(233,184,60,.5);z-index:-1;transform:rotate(-1deg)}
+.cover .sub{font-size:23px;color:var(--ink-soft);transform:rotate(-1deg);max-width:560px}
+.cover .warn{font-family:var(--scribble);font-size:22px;color:var(--red);margin-top:16px;transform:rotate(1.5deg)}
+.enter-btn{
+  margin-top:44px;font-family:var(--marker);font-size:22px;color:var(--ink);
+  background:none;border:3px solid var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+  padding:14px 34px;cursor:pointer;transform:rotate(-1deg);transition:transform .15s,background .15s,color .15s,border-color .15s;
+}
+.enter-btn:hover{transform:rotate(1deg) scale(1.04);background:rgba(233,184,60,.25)}
+.scroll-hint{position:absolute;bottom:24px;font-family:var(--scribble);font-size:20px;color:var(--ink-soft);animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(7px)}}
+.splash{position:absolute;border-radius:50% 60% 55% 45%/55% 45% 60% 50%;filter:blur(.5px);opacity:.45;pointer-events:none;z-index:0}
+
+/* ============ CHAPTERS ============ */
+.chapter{padding:100px 0 60px;position:relative}
+.ch-label{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--ink-soft);text-transform:uppercase;margin-bottom:8px}
+.chapter h2{font-family:var(--marker);font-size:clamp(30px,5vw,46px);transform:rotate(-1deg);margin-bottom:26px;display:inline-block}
+.hl{background:linear-gradient(transparent 55%,rgba(61,111,180,.3) 55%,rgba(61,111,180,.3) 92%,transparent 92%)}
+.hl.r{background:linear-gradient(transparent 55%,rgba(212,84,60,.3) 55%,rgba(212,84,60,.3) 92%,transparent 92%)}
+.hl.g{background:linear-gradient(transparent 55%,rgba(90,154,111,.32) 55%,rgba(90,154,111,.32) 92%,transparent 92%)}
+.hl.y{background:linear-gradient(transparent 55%,rgba(233,184,60,.45) 55%,rgba(233,184,60,.45) 92%,transparent 92%)}
+p.story{font-size:21px;line-height:1.65;max-width:640px;margin-bottom:18px}
+p.story b{color:var(--blue)}
+
+/* inner voice bubbles */
+.voice{
+  font-family:var(--scribble);font-size:21px;color:var(--blue);
+  border:2.5px dashed rgba(61,111,180,.5);border-radius:60% 40% 55% 45%/50% 60% 40% 55%;
+  padding:14px 22px;max-width:340px;margin:22px 0 26px auto;
+  transform:rotate(1.5deg) translateY(16px);opacity:0;transition:opacity .5s,transform .5s;
+  background:rgba(61,111,180,.05);
+}
+.voice.left{margin:22px auto 26px 0;transform:rotate(-1.5deg) translateY(16px);color:var(--red);border-color:rgba(212,84,60,.5);background:rgba(212,84,60,.05)}
+.voice.show{opacity:1;transform:rotate(1.5deg) translateY(0)}
+.voice.left.show{transform:rotate(-1.5deg) translateY(0)}
+.voice::before{content:'inner voice:';display:block;font-size:14px;font-family:var(--mono);letter-spacing:.1em;opacity:.55;margin-bottom:2px}
+.voice.me::before{content:'me:'}
+
+/* sketch frames */
+.frame{
+  border:3px solid var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+  padding:24px;margin:30px 0;background:var(--card);position:relative;
+}
+.frame .tape2{position:absolute;width:90px;height:26px;background:rgba(61,111,180,.25);top:-13px;left:50%;transform:translateX(-50%) rotate(-2deg)}
+.frame h3{font-family:var(--marker);font-size:22px;margin-bottom:12px}
+.frame .cap{font-family:var(--scribble);font-size:19px;color:var(--ink-soft);margin-top:10px}
+.badge{display:inline-block;font-family:var(--mono);font-size:11px;border:1.5px solid var(--ink);border-radius:10px;padding:2px 9px;margin-bottom:8px;transform:rotate(-1deg)}
+
+/* CGPA */
+.cgpa-bar{height:26px;border:2.5px solid var(--ink);border-radius:20px 8px 18px 10px;overflow:hidden;background:var(--paper);margin:10px 0 4px}
+.cgpa-fill{height:100%;width:0;background:repeating-linear-gradient(45deg,var(--green),var(--green) 8px,#6fae84 8px,#6fae84 16px);transition:width 1.4s cubic-bezier(.2,.8,.2,1);border-radius:0 8px 8px 0}
+.cgpa-num{font-family:var(--marker);font-size:30px;color:var(--green)}
+
+/* emotion demo */
+.emo-row{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0}
+.emo{font-size:42px;cursor:pointer;background:none;border:2.5px solid transparent;border-radius:50%;padding:6px 9px;transition:transform .12s,border-color .12s;line-height:1}
+.emo:hover{transform:scale(1.18) rotate(-6deg)}
+.emo.sel{border-color:var(--blue);background:rgba(61,111,180,.1)}
+.emo-out{font-family:var(--mono);font-size:14px;min-height:64px;line-height:1.7}
+.conf{display:inline-block;height:10px;background:var(--blue);border-radius:5px;vertical-align:middle;transition:width .5s;margin-left:6px}
+
+/* pokedex */
+.poke-card{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+.poke-sprite{font-size:84px;line-height:1;transition:transform .3s;cursor:pointer;user-select:none}
+.poke-sprite:hover{transform:scale(1.1) rotate(4deg)}
+.poke-out{font-family:var(--mono);font-size:14px;line-height:1.8;flex:1;min-width:220px}
+.poke-out .lbl{color:var(--red);font-weight:600}
+
+/* drawing canvas */
+canvas.pad{
+  width:100%;border:3px solid var(--ink);
+  border-radius:225px 15px 255px 15px/15px 255px 15px 225px;
+  background:#fff;cursor:crosshair;touch-action:none;display:block;
+}
+.draw-tools{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.swatch{width:30px;height:30px;border-radius:50%;border:2.5px solid transparent;cursor:pointer;transition:transform .12s}
+.swatch:hover{transform:scale(1.15)}
+.swatch.sel{border-color:var(--ink)}
+.tool-btn{font-family:var(--hand);font-size:17px;border:2px solid var(--ink);color:var(--ink);background:none;border-radius:30px 8px 26px 10px;padding:5px 16px;cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.tool-btn:hover{background:rgba(233,184,60,.25)}
+
+/* dice */
+.dice-zone{display:flex;gap:30px;align-items:center;flex-wrap:wrap;margin:14px 0}
+.die{font-size:64px;line-height:1;user-select:none}
+.die.rolling{animation:shake .35s linear infinite}
+@keyframes shake{25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.dice-label{font-family:var(--mono);font-size:12px;color:var(--ink-soft);text-align:center;margin-top:4px}
+.dice-msg{font-family:var(--scribble);font-size:23px;color:var(--red);min-height:36px;transform:rotate(-.5deg)}
+
+/* the circle */
+.circle-stage{position:relative;height:320px;border:3px solid var(--ink);border-radius:15px 225px 15px 255px/255px 15px 225px 15px;background:var(--card);overflow:hidden;cursor:none;transition:background .2s}
+.friend{
+  position:absolute;width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-family:var(--marker);font-size:11px;line-height:1;color:#fff;user-select:none;pointer-events:none;
+  box-shadow:2px 3px 0 var(--shadow);padding:2px;
+}
+.friend.me-dot{width:62px;height:62px;font-size:17px;background:var(--ink);color:var(--paper)}
+.friend.you-dot{background:var(--card)!important;color:var(--ink);border:3px dashed var(--ink);box-shadow:none;transition:border-color .3s}
+.friend.you-dot.captured{border-style:solid;border-color:var(--green);box-shadow:2px 3px 0 var(--shadow)}
+.capture-meter{
+  position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:5;
+  width:210px;height:22px;border:2.5px solid var(--ink);border-radius:14px 6px 12px 8px;
+  background:var(--paper);overflow:hidden;pointer-events:none;
+}
+.capture-fill{height:100%;width:0%;background:repeating-linear-gradient(45deg,var(--green),var(--green) 7px,#6fae84 7px,#6fae84 14px);transition:width .15s linear}
+.capture-meter span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;color:var(--ink)}
+.confetti{position:absolute;width:9px;height:9px;pointer-events:none;z-index:6}
+.circle-msg{font-family:var(--scribble);font-size:22px;color:var(--green);min-height:34px;margin-top:12px;transform:rotate(-.5deg)}
+
+/* contact */
+.contact-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px}
+.contact-btn{
+  font-family:var(--marker);font-size:18px;color:var(--ink);text-decoration:none;
+  border:3px solid var(--ink);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;
+  padding:12px 26px;transition:transform .15s,background .15s;display:inline-block;
+}
+.contact-btn:hover{transform:rotate(-2deg) scale(1.05)}
+.contact-btn.b:hover{background:rgba(61,111,180,.18)}
+.contact-btn.r:hover{background:rgba(212,84,60,.15)}
+.contact-btn.y:hover{background:rgba(233,184,60,.3)}
+
+.footer{padding:50px 0 90px;text-align:center;font-family:var(--scribble);font-size:21px;color:var(--ink-soft)}
+
+/* sleep mode */
+.sleep-btn{
+  position:fixed;top:16px;right:16px;z-index:40;font-size:24px;background:var(--card);
+  border:2.5px solid var(--ink);border-radius:50%;width:50px;height:50px;cursor:pointer;
+  transition:transform .15s,box-shadow .3s,background .2s;box-shadow:2px 3px 0 var(--shadow);
+}
+.sleep-btn:hover{transform:rotate(-15deg) scale(1.08)}
+.sleep-overlay{
+  position:fixed;inset:0;background:rgba(14,17,30,.95);z-index:100;display:none;
+  align-items:center;justify-content:center;flex-direction:column;color:#cfd6ee;cursor:pointer;text-align:center;padding:20px;
+}
+.sleep-overlay.on{display:flex}
+.sleep-overlay .zz{position:absolute;font-family:var(--marker);color:#8fa0d8;animation:floatz 4s linear infinite;opacity:0}
+@keyframes floatz{0%{transform:translateY(20px) rotate(-6deg);opacity:0}15%{opacity:.9}100%{transform:translateY(-58vh) rotate(10deg);opacity:0}}
+.sleep-overlay h3{font-family:var(--marker);font-size:34px;margin-bottom:10px}
+.sleep-overlay p{font-family:var(--scribble);font-size:24px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s,transform .6s}
+.reveal.show{opacity:1;transform:none}
+button:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<div id="progressLine"></div>
+
+<button class="sleep-btn" id="sleepBtn" title="my favourite hobby" aria-label="activate sleep mode">🌙</button>
+<div class="sleep-overlay" id="sleepOverlay">
+  <h3>shh… recharging.</h3>
+  <p>(sleep is a legitimate hobby. tap anywhere to wake me up)</p>
+</div>
+
+<nav id="ribbons">
+  <a href="#ch1" style="background:#3d6fb4"><span>📖</span>the story</a>
+  <a href="#ch2" style="background:#d4543c"><span>🔧</span>the builds</a>
+  <a href="#ch3" style="background:#e9b83c;color:#2e2c2a"><span>🎨</span>the art</a>
+  <a href="#ch4" style="background:#5a9a6f"><span>✉️</span>say hi</a>
+</nav>
+
+<!-- ============ COVER · 7:00 AM ============ -->
+<header class="cover">
+  <div class="splash" style="width:160px;height:130px;background:var(--blue);top:14%;left:7%"></div>
+  <div class="splash" style="width:100px;height:85px;background:var(--red);bottom:18%;right:9%"></div>
+  <div class="splash" style="width:80px;height:70px;background:var(--yellow);top:20%;right:18%"></div>
+  <div class="tape"></div>
+  <h1>the sketchbook of<br><span class="u">SAMRUDH&nbsp;P.S</span></h1>
+  <p class="sub">engineer · ML builder · part-time artist · full-time overthinker</p>
+  <p class="warn">⚠ warning: the author talks to himself. you'll hear both of us.</p>
+  <button class="enter-btn" onclick="document.getElementById('ch1').scrollIntoView({behavior:'smooth'})">open the sketchbook →</button>
+  <div class="scroll-hint">↓ or just scroll, I'm not your boss</div>
+</header>
+
+<div class="wrap">
+
+<!-- ============ CHAPTER 1 · MORNING ============ -->
+<section class="chapter" id="ch1">
+  <p class="ch-label reveal">chapter 01 — the morning pages</p>
+  <h2 class="reveal">the <span class="hl">origin story</span></h2>
+  <p class="story reveal">Hi. I'm Samrudh — an engineering student at <b>B.M.S. College of Engineering, Bengaluru</b>. On paper, I'm studying computer science. In practice, I spend my days building things — models, tools, half-crazy ideas — and my nights convincing myself to sleep instead of starting one more.</p>
+  <div class="voice left me reveal">"should we mention the CGPA or is that flexing?"</div>
+  <div class="voice reveal">"it's 9.48. flex it. we earned that with our sleep schedule."</div>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <h3>exhibit A: the grades</h3>
+    <div class="cgpa-bar"><div class="cgpa-fill" id="cgpaFill"></div></div>
+    <span class="cgpa-num" id="cgpaNum">0.00</span><span style="font-family:var(--marker);font-size:20px;color:var(--ink-soft)"> / 10 CGPA</span>
+    <p class="cap">drawn to scale. the missing 0.52 was traded for naps. worth it.</p>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 2 · AFTERNOON ============ -->
+<section class="chapter" id="ch2">
+  <p class="ch-label reveal">chapter 02 — the part recruiters skip to</p>
+  <h2 class="reveal">things I <span class="hl r">build for fun</span></h2>
+  <p class="story reveal">Here's how my brain works: I see something cool, I get curious, and a few days later there's a working prototype on my laptop. I learn fast — not because I have to, but because <b>half-understanding something physically bothers me</b>.</p>
+  <div class="voice me reveal">"fast learner sounds like every resume ever…"</div>
+  <div class="voice left reveal">"okay then let them TEST the projects. right here. on the page."</div>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <span class="badge">FLAGSHIP · OPEN SOURCE</span>
+    <h3>research-ops 🔬</h3>
+    <p class="story" style="font-size:19px">My biggest build: an open-source, <b>Claude-powered research pipeline</b> that takes you from "I have a vague topic" to "I have a vetted project idea" in five stages — it discovers &amp; scores papers, reviews them in depth, finds research gaps, generates feasibility-checked ideas, and even simulates a panel of advisors grilling you. Built solo, shipped publicly, with full docs and a roadmap.</p>
+    <a href="https://github.com/SamrudhPS/research-ops" target="_blank" rel="noopener" style="color:var(--blue);font-family:var(--mono);font-size:14px">→ github.com/SamrudhPS/research-ops</a>
+  </div>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <span class="badge">ML SIDE QUEST · TRY IT</span>
+    <h3>face emotion detection 🎭</h3>
+    <p class="story" style="font-size:19px">I built a model that reads emotions from faces. Can't ship the webcam version into a sketchbook, so here's the next best thing — pick a face, my "model" will classify it:</p>
+    <div class="emo-row" id="emoRow">
+      <button class="emo" data-e="happy">😄</button>
+      <button class="emo" data-e="sad">😢</button>
+      <button class="emo" data-e="angry">😠</button>
+      <button class="emo" data-e="surprised">😲</button>
+      <button class="emo" data-e="sleepy">🥱</button>
+      <button class="emo" data-e="confused">🤨</button>
+    </div>
+    <div class="emo-out" id="emoOut">awaiting input… the model is stretching its layers.</div>
+  </div>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <span class="badge">ML SIDE QUEST · TRY IT</span>
+    <h3>pokédex classifier 🔴</h3>
+    <p class="story" style="font-size:19px">Yes, I trained a CNN to recognize Pokémon. No, I will not apologize. Click the mystery creature to run inference:</p>
+    <div class="poke-card">
+      <div class="poke-sprite" id="pokeSprite" title="click to classify">❓</div>
+      <div class="poke-out" id="pokeOut">model loaded. weights: questionable. confidence: unearned.<br>→ click the creature</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 3 · GOLDEN HOUR ============ -->
+<section class="chapter" id="ch3">
+  <p class="ch-label reveal">chapter 03 — when the laptop closes</p>
+  <h2 class="reveal">the <span class="hl y">analog side</span></h2>
+  <p class="story reveal">When the laptop closes, the pencils come out. I <b>sketch and paint</b> — pencil first, colour later. Same way I build software, honestly. Here, you try. This page is yours:</p>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <h3>shared canvas ✏️</h3>
+    <canvas id="sketchpad" class="pad" style="height:300px" aria-label="drawing canvas — sketch something"></canvas>
+    <div class="draw-tools">
+      <div class="swatch sel" style="background:#2e2c2a" data-c="#2e2c2a" title="pencil"></div>
+      <div class="swatch" style="background:#3d6fb4" data-c="#3d6fb4" title="blue"></div>
+      <div class="swatch" style="background:#d4543c" data-c="#d4543c" title="red"></div>
+      <div class="swatch" style="background:#e9b83c" data-c="#e9b83c" title="yellow"></div>
+      <div class="swatch" style="background:#5a9a6f" data-c="#5a9a6f" title="green"></div>
+      <button class="tool-btn" id="clearPad">tear out page</button>
+    </div>
+    <p class="cap">draw anything. I judge silently, like a true artist.</p>
+  </div>
+
+  <div class="voice me reveal">"what if they draw something better than us?"</div>
+  <div class="voice left reveal">"then we recruit them. nobody out-sketches us AND walks away."</div>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <h3>scientific test: my beginner's luck 🎲</h3>
+    <p class="story" style="font-size:19px">A known fact about me: I have <b>suspiciously good beginner's luck</b>. First attempt at anything? Weirdly great. Let's test yours against mine — roll the dice:</p>
+    <div class="dice-zone">
+      <div><div class="die" id="dieYou">⚀</div><div class="dice-label">YOU</div></div>
+      <div style="font-family:var(--marker);font-size:24px">vs</div>
+      <div><div class="die" id="dieMe">⚀</div><div class="dice-label">SAMRUDH</div></div>
+      <button class="tool-btn" id="rollBtn" style="font-size:19px;padding:8px 22px">roll!</button>
+    </div>
+    <div class="dice-msg" id="diceMsg"></div>
+  </div>
+
+  <div class="frame reveal">
+    <div class="tape2"></div>
+    <h3>the circle 🤝</h3>
+    <p class="story" style="font-size:19px">One more thing you should know: I protect my people. I keep my circle happy, and I <i>hate</i> losing friends — so the circle never shrinks, <b>it only grows</b>. Move your cursor inside — or press &amp; hold on mobile — and stay a while:</p>
+    <div class="circle-stage" id="circleStage">
+      <div class="capture-meter" id="captureMeter"><div class="capture-fill" id="captureFill"></div><span id="captureLabel">friendship: 0%</span></div>
+    </div>
+    <div class="circle-msg" id="circleMsg">…it's safe. probably.</div>
+  </div>
+</section>
+
+<!-- ============ CHAPTER 4 ============ -->
+<section class="chapter" id="ch4">
+  <p class="ch-label reveal">chapter 04 — the last page (for now)</p>
+  <h2 class="reveal">write <span class="hl g">back to me</span></h2>
+  <p class="story reveal">That's the sketchbook so far — a fast learner who builds ML things for fun, ships real tools, paints on weekends, sleeps competitively, and argues with himself in the margins. The next pages are blank on purpose. <b>Maybe you're in them.</b></p>
+  <div class="voice me reveal">"too cheesy?"</div>
+  <div class="voice left reveal">"no such thing. hit them with the buttons."</div>
+  <div class="contact-row reveal">
+    <a class="contact-btn b" href="mailto:samrudhps19@gmail.com">✉ samrudhps19@gmail.com</a>
+    <a class="contact-btn r" href="#" title="add your GitHub link">⌥ GitHub</a>
+    <a class="contact-btn y" href="#" title="add your LinkedIn link">in LinkedIn</a>
+  </div>
+</section>
+
+</div>
+
+<footer class="footer">
+  hand-sketched in Bengaluru · no models were harmed during inference · © Samrudh P.S
+</footer>
+
+<script>
+/* ---------------- pencil progress line ---------------- */
+const progressLine=document.getElementById('progressLine');
+let ticking=false;
+function onScroll(){
+  if(ticking)return;ticking=true;
+  requestAnimationFrame(()=>{
+    const max=document.documentElement.scrollHeight-innerHeight;
+    const t=Math.min(1,Math.max(0,scrollY/(max||1)));
+    progressLine.style.height=(t*100)+'vh';
+    ticking=false;
+  });
+}
+addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+/* ---------------- reveal on scroll ---------------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}
+}),{threshold:.25});
+document.querySelectorAll('.reveal,.voice').forEach(el=>io.observe(el));
+
+/* ---------------- CGPA counter ---------------- */
+const cgpaIO=new IntersectionObserver(es=>{
+  if(!es[0].isIntersecting)return;
+  cgpaIO.disconnect();
+  document.getElementById('cgpaFill').style.width='94.8%';
+  let v=0;const num=document.getElementById('cgpaNum');
+  const t=setInterval(()=>{v+=0.12;if(v>=9.48){v=9.48;clearInterval(t);}num.textContent=v.toFixed(2);},16);
+},{threshold:.5});
+cgpaIO.observe(document.getElementById('cgpaFill'));
+
+/* ---------------- emotion detection demo ---------------- */
+const EMO={
+  happy:["HAPPY","this one's easy. probably just saw their code compile first try."],
+  sad:["SAD","classic symptoms of a deleted local branch."],
+  angry:["ANGRY","detected 'works on my machine' energy from the other side."],
+  surprised:["SURPRISED","subject likely just understood backpropagation."],
+  sleepy:["SLEEPY","model relates deeply to this class. it's my favourite."],
+  confused:["CONFUSED","subject was asked to explain their own regex."]
+};
+const emoOut=document.getElementById('emoOut');
+document.getElementById('emoRow').addEventListener('click',e=>{
+  const b=e.target.closest('.emo');if(!b)return;
+  document.querySelectorAll('.emo').forEach(x=>x.classList.remove('sel'));
+  b.classList.add('sel');
+  emoOut.innerHTML='running inference<span id="dots">.</span>';
+  let n=0;const dots=setInterval(()=>{const d=document.getElementById('dots');if(d)d.textContent='.'.repeat(1+(++n%3));},220);
+  setTimeout(()=>{
+    clearInterval(dots);
+    const[lbl,note]=EMO[b.dataset.e];
+    const conf=(88+Math.random()*11).toFixed(1);
+    emoOut.innerHTML=`prediction: <b style="color:var(--blue)">${lbl}</b> · confidence ${conf}%<span class="conf" style="width:${conf*1.4}px"></span><br><span style="color:var(--ink-soft)">model notes: ${note}</span>`;
+  },900);
+});
+
+/* ---------------- pokedex demo ---------------- */
+const POKE=[
+  ["🐢","SQUIRTLE","water type. 96.4%","also accepts: 'small angry turtle'"],
+  ["🔥","CHARMANDER","fire type. 94.1%","tail flame status: emotionally stable"],
+  ["⚡","PIKACHU","electric type. 99.2%","the one class the model never gets wrong"],
+  ["🦇","ZUBAT","poison/flying. 91.7%","appeared 47 times in the validation set. and in caves. always in caves."],
+  ["🌱","BULBASAUR","grass type. 95.5%","statistically the best starter. fight me."],
+  ["👻","GASTLY","ghost type. 89.9%","confidence dropped. model is scared."]
+];
+let pokeIdx=-1;
+document.getElementById('pokeSprite').addEventListener('click',()=>{
+  const s=document.getElementById('pokeSprite'),o=document.getElementById('pokeOut');
+  pokeIdx=(pokeIdx+1)%POKE.length;
+  const[em,name,conf,note]=POKE[pokeIdx];
+  s.textContent='⏳';
+  o.innerHTML='inference running on 1 (one) brain cell…';
+  setTimeout(()=>{
+    s.textContent=em;
+    o.innerHTML=`<span class="lbl">${name}</span> — ${conf}<br><span style="color:var(--ink-soft)">${note}</span><br>→ click again for next batch`;
+  },650);
+});
+
+/* ---------------- generic drawing pad factory ---------------- */
+function makePad(canvasId,heightPx,fixedColor){
+  const c=document.getElementById(canvasId),ctx=c.getContext('2d');
+  let drawing=false,color=fixedColor||'#2e2c2a',last=null,drew=false;
+  function size(){
+    const r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);
+    const img=drew?ctx.getImageData(0,0,c.width,c.height):null;
+    c.width=r.width*d;c.height=heightPx*d;ctx.setTransform(d,0,0,d,0,0);
+    ctx.lineCap='round';ctx.lineJoin='round';
+    if(img)ctx.putImageData(img,0,0);
+  }
+  size();addEventListener('resize',size);
+  function pt(e){const r=c.getBoundingClientRect(),p=e.touches?e.touches[0]:e;return{x:p.clientX-r.left,y:p.clientY-r.top};}
+  function start(e){drawing=true;last=pt(e);if(e.touches)e.preventDefault();}
+  function move(e){
+    if(!drawing)return;
+    const p=pt(e);
+    ctx.strokeStyle=color;ctx.lineWidth=3.2;
+    ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();
+    last=p;drew=true;
+    if(e.touches)e.preventDefault();
+  }
+  function end(){drawing=false;}
+  c.addEventListener('mousedown',start);c.addEventListener('mousemove',move);addEventListener('mouseup',end);
+  c.addEventListener('touchstart',start,{passive:false});c.addEventListener('touchmove',move,{passive:false});addEventListener('touchend',end);
+  return{
+    setColor:v=>color=v,
+    clear:()=>{ctx.clearRect(0,0,c.width,c.height);drew=false;},
+    hasInk:()=>drew
+  };
+}
+/* sketchpad */
+const sketch=makePad('sketchpad',300);
+document.querySelectorAll('.swatch').forEach(s=>s.addEventListener('click',()=>{
+  document.querySelectorAll('.swatch').forEach(x=>x.classList.remove('sel'));
+  s.classList.add('sel');sketch.setColor(s.dataset.c);
+}));
+document.getElementById('clearPad').addEventListener('click',()=>sketch.clear());
+
+/* ---------------- beginner's luck dice ---------------- */
+(function(){
+  const faces=['⚀','⚁','⚂','⚃','⚄','⚅'];
+  const dy=document.getElementById('dieYou'),dm=document.getElementById('dieMe');
+  const msg=document.getElementById('diceMsg'),btn=document.getElementById('rollBtn');
+  let rolls=0,busy=false;
+  btn.addEventListener('click',()=>{
+    if(busy)return;busy=true;rolls++;
+    msg.textContent='';
+    dy.classList.add('rolling');dm.classList.add('rolling');
+    const spin=setInterval(()=>{
+      dy.textContent=faces[Math.floor(Math.random()*6)];
+      dm.textContent=faces[Math.floor(Math.random()*6)];
+    },90);
+    setTimeout(()=>{
+      clearInterval(spin);
+      dy.classList.remove('rolling');dm.classList.remove('rolling');
+      let you,me;
+      if(rolls===1){
+        me=1+Math.floor(Math.random()*3);you=me+1+Math.floor(Math.random()*(6-me));
+        msg.textContent='you won?! …ohh. you\'re a beginner here. of course. beginner\'s luck transfers — I literally radiate it.';
+      }else{
+        you=1+Math.floor(Math.random()*6);me=1+Math.floor(Math.random()*6);
+        if(me>you)msg.textContent='aaand we\'re back to normal. the universe corrects itself.';
+        else if(you>me)msg.textContent='okay now you\'re just showing off. rematch.';
+        else msg.textContent='a tie. diplomatic. I respect it.';
+      }
+      dy.textContent=faces[you-1];dm.textContent=faces[me-1];
+      busy=false;
+    },1100);
+  });
+})();
+
+/* ---------------- the circle: friendship capture ---------------- */
+(function(){
+  const stage=document.getElementById('circleStage'),msgEl=document.getElementById('circleMsg');
+  const meterFill=document.getElementById('captureFill'),meterLabel=document.getElementById('captureLabel');
+  const COLORS=['#3d6fb4','#d4543c','#e9b83c','#5a9a6f','#8a6db4','#c97a9e','#4fa3a5'];
+  const NAMES=['sankalp','sashreek','shaista','sanman','shravani','reva','saanvi'];
+  let W,H,cx,cy,R,friends=[],me,you;
+  let inside=false,charge=0,captured=false,px=0,py=0,baseAngle=0;
+  const TEASE=[
+    'oh? a visitor. the circle has noticed you.',
+    'they like you. stay still, this won\'t hurt.',
+    'friendship is loading. resistance is statistically pointless.',
+    'almost there. we already saved you a spot.'
+  ];
+  function build(){
+    stage.querySelectorAll('.friend').forEach(f=>f.remove());
+    friends=[];captured=false;charge=0;
+    W=stage.clientWidth;H=stage.clientHeight;cx=W/2;cy=H/2+8;
+    R=Math.min(W,H)/2-66;
+    me=document.createElement('div');
+    me.className='friend me-dot';me.textContent='ME';
+    stage.appendChild(me);
+    NAMES.forEach((n,i)=>{
+      const f=document.createElement('div');
+      f.className='friend';f.textContent=n;f.style.background=COLORS[i%COLORS.length];
+      stage.appendChild(f);
+      friends.push({el:f,ang:i/NAMES.length*Math.PI*2,r:R,size:56});
+    });
+    you=document.createElement('div');
+    you.className='friend you-dot';you.textContent='YOU';
+    you.style.opacity=0;stage.appendChild(you);
+    meterFill.style.width='0%';meterLabel.textContent='friendship: 0%';
+  }
+  build();
+  let lastW=stage.clientWidth;
+  function regeo(){
+    W=stage.clientWidth;H=stage.clientHeight;cx=W/2;cy=H/2+8;
+    R=Math.min(W,H)/2-66;
+    friends.forEach(f=>f.r=R);
+  }
+  addEventListener('resize',()=>{
+    const w=stage.clientWidth;
+    if(Math.abs(w-lastW)<24){regeo();return;}   // mobile URL-bar resize: keep progress
+    lastW=w;
+    if(captured){regeo();return;}               // never undo a captured friend
+    build();
+  });
+  function setPointer(e,entering){
+    const r=stage.getBoundingClientRect(),p=e.touches?e.touches[0]:e;
+    px=p.clientX-r.left;py=p.clientY-r.top;
+    if(entering!==undefined)inside=entering;
+  }
+  stage.addEventListener('mouseenter',e=>{setPointer(e,true);if(!captured)msgEl.textContent=TEASE[0];});
+  stage.addEventListener('mousemove',e=>setPointer(e,true));
+  stage.addEventListener('mouseleave',()=>{
+    inside=false;
+    if(!captured&&charge>2)msgEl.textContent='left so soon? the circle remembers. it always remembers.';
+  });
+  stage.addEventListener('touchstart',e=>{setPointer(e,true);e.preventDefault();},{passive:false});
+  stage.addEventListener('touchmove',e=>{setPointer(e,true);e.preventDefault();},{passive:false});
+  stage.addEventListener('touchend',()=>{inside=false;});
+  function confettiBurst(){
+    for(let i=0;i<26;i++){
+      const c=document.createElement('div');c.className='confetti';
+      c.style.background=COLORS[i%COLORS.length];
+      c.style.left=cx+'px';c.style.top=cy+'px';
+      c.style.borderRadius=Math.random()<.5?'50%':'2px';
+      stage.appendChild(c);
+      const ang=Math.random()*Math.PI*2,sp=2+Math.random()*4;
+      let vx=Math.cos(ang)*sp,vy=Math.sin(ang)*sp-2,x=cx,y=cy,life=0;
+      (function fall(){
+        life++;vy+=0.12;x+=vx;y+=vy;
+        c.style.left=x+'px';c.style.top=y+'px';
+        c.style.transform='rotate('+(life*9)+'deg)';
+        c.style.opacity=Math.max(0,1-life/70);
+        if(life<70)requestAnimationFrame(fall);else c.remove();
+      })();
+    }
+  }
+  function capture(){
+    captured=true;
+    you.classList.add('captured');
+    friends.push({el:you,ang:0,r:R,size:56,isYou:true});
+    const total=friends.length;
+    friends.forEach((f,i)=>{f.targetSlot=i/total*Math.PI*2;});
+    confettiBurst();
+    meterLabel.textContent='friendship: 100% ✓';
+    msgEl.textContent='that\'s it. you\'re officially in the circle now. there is no leave button — I checked. twice.';
+  }
+  function loop(){
+    baseAngle+=0.006;
+    if(!captured){
+      if(inside){
+        charge=Math.min(100,charge+0.45);
+        if(charge>30&&charge<31.4)msgEl.textContent=TEASE[1];
+        if(charge>60&&charge<61.4)msgEl.textContent=TEASE[2];
+        if(charge>85&&charge<86.4)msgEl.textContent=TEASE[3];
+        if(charge>=100)capture();
+      }else{
+        charge=Math.max(0,charge-0.8);
+      }
+      meterFill.style.width=charge+'%';
+      meterLabel.textContent='friendship: '+Math.floor(charge)+'%';
+    }
+    me.style.left=(cx-31)+'px';me.style.top=(cy-31)+'px';
+    const pull=captured?0:Math.min(charge/100,1)*0.35;
+    friends.forEach(f=>{
+      if(f.isYou&&!captured)return;
+      const slot=(f.targetSlot!==undefined?f.targetSlot:f.ang);
+      const a=baseAngle+slot;
+      let tx=cx+Math.cos(a)*f.r,ty=cy+Math.sin(a)*f.r;
+      if(!captured&&inside){tx+=(px-tx)*pull*0.5;ty+=(py-ty)*pull*0.5;}
+      const half=f.size/2;
+      f.el.style.left=(tx-half)+'px';f.el.style.top=(ty-half)+'px';
+    });
+    if(!captured){
+      if(inside){you.style.opacity=1;you.style.left=(px-28)+'px';you.style.top=(py-28)+'px';}
+      else you.style.opacity=0;
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+/* ---------------- sleep mode ---------------- */
+const sleepBtn=document.getElementById('sleepBtn'),overlay=document.getElementById('sleepOverlay');
+sleepBtn.addEventListener('click',()=>{
+  overlay.classList.add('on');
+  overlay.querySelectorAll('.zz').forEach(z=>z.remove());
+  for(let i=0;i<7;i++){
+    const z=document.createElement('div');z.className='zz';z.textContent='Z';
+    z.style.left=(15+Math.random()*70)+'%';
+    z.style.bottom=(5+Math.random()*20)+'%';
+    z.style.fontSize=(22+Math.random()*36)+'px';
+    z.style.animationDelay=(Math.random()*3)+'s';
+    overlay.appendChild(z);
+  }
+});
+overlay.addEventListener('click',()=>overlay.classList.remove('on'));
+addEventListener('keydown',e=>{if(e.key==='Escape')overlay.classList.remove('on');});
+</script>
+</body>
+</html>
